@@ -1,9 +1,11 @@
 package com.pizzashop.pizza_shop.repository;
 
-import com.pizzashop.pizza_shop.entity.Pizza;
+import com.pizzashop.pizza_shop.entity.Order;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface PizzaRepository extends JpaRepository<Pizza,Long> {
+public interface OrderRepository extends JpaRepository<Order,Long> {
+
+
 }
