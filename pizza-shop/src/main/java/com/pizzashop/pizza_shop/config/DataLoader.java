@@ -1,17 +1,9 @@
 package com.pizzashop.pizza_shop.config;
 
-import com.pizzashop.pizza_shop.entity.Pizza;
-import com.pizzashop.pizza_shop.enums.PizzaSize;
-import com.pizzashop.pizza_shop.repository.OrderRepository;
-import com.pizzashop.pizza_shop.repository.PizzaRepository;
-import com.pizzashop.pizza_shop.service.OrderService;
-import com.pizzashop.pizza_shop.transactions.basic.BasicTransactionDemo;
-import com.pizzashop.pizza_shop.transactions.rollback.RollBackRulesDemo;
+import com.pizzashop.pizza_shop.transactions.propagations.*;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-
-import java.math.BigDecimal;
 
 @Configuration
 public class DataLoader {
@@ -67,7 +59,7 @@ public class DataLoader {
 
 
 //    @Bean
-//    CommandLineRunner testOrder(OrderService orderService)
+//    CommandLineRunner testOrder(OrderService1 orderService)
 //    {
 //        return args -> {
 //
@@ -93,26 +85,38 @@ public class DataLoader {
 //    }
 
 
+//    @Bean
+//    CommandLineRunner testRollBackRules(RollBackRulesDemo rollBackRulesDemo)
+//    {
+//        return args ->{
+//            try
+//            {
+//                rollBackRulesDemo.runTimeExceptionDemo();
+//            }
+//            catch (Exception e)
+//            {
+//                System.out.println("roll backed due to "+e.getMessage());
+//            }
+//            try
+//            {
+//                rollBackRulesDemo.checkedException();
+//            }
+//            catch (Exception e)
+//            {
+//                System.out.println("roll backed due to "+e.getMessage());
+//            }
+//        };
+//    }
+
     @Bean
-    CommandLineRunner testRollBackRules(RollBackRulesDemo rollBackRulesDemo)
+    CommandLineRunner testPropaqationRequiresNew(OrderService1 orderService1)
     {
-        return args ->{
-            try
-            {
-                rollBackRulesDemo.runTimeExceptionDemo();
-            }
-            catch (Exception e)
-            {
-                System.out.println("roll backed due to "+e.getMessage());
-            }
-            try
-            {
-                rollBackRulesDemo.checkedException();
-            }
-            catch (Exception e)
-            {
-                System.out.println("roll backed due to "+e.getMessage());
-            }
+        return args->{
+          try{
+              orderService1.createOrder();
+          } catch (Exception e) {
+              throw new RuntimeException(e);
+          }
         };
     }
 }
