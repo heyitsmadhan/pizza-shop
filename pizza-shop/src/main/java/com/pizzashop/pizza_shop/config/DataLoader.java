@@ -6,6 +6,7 @@ import com.pizzashop.pizza_shop.repository.OrderRepository;
 import com.pizzashop.pizza_shop.repository.PizzaRepository;
 import com.pizzashop.pizza_shop.service.OrderService;
 import com.pizzashop.pizza_shop.transactions.basic.BasicTransactionDemo;
+import com.pizzashop.pizza_shop.transactions.rollback.RollBackRulesDemo;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -74,20 +75,44 @@ public class DataLoader {
 //        };
 //    }
 
+//    @Bean
+//    CommandLineRunner testBasicTransactionDemo(BasicTransactionDemo basicTransactionDemo)
+//    {
+//        return args -> {
+//
+//           try
+//           {
+//               basicTransactionDemo.placeOrder(1L,1);
+//           }
+//           catch (Exception e)
+//           {
+//               System.out.println("Transaction Rolled back due to : "+e.getMessage());
+//           }
+//        };
+//
+//    }
+
+
     @Bean
-    CommandLineRunner testBasicTransactionDemo(BasicTransactionDemo basicTransactionDemo)
+    CommandLineRunner testRollBackRules(RollBackRulesDemo rollBackRulesDemo)
     {
-        return args -> {
-
-           try
-           {
-               basicTransactionDemo.placeOrder(1L,1);
-           }
-           catch (Exception e)
-           {
-               System.out.println("Transaction Rolled back due to : "+e.getMessage());
-           }
+        return args ->{
+            try
+            {
+                rollBackRulesDemo.runTimeExceptionDemo();
+            }
+            catch (Exception e)
+            {
+                System.out.println("roll backed due to "+e.getMessage());
+            }
+            try
+            {
+                rollBackRulesDemo.checkedException();
+            }
+            catch (Exception e)
+            {
+                System.out.println("roll backed due to "+e.getMessage());
+            }
         };
-
     }
 }
