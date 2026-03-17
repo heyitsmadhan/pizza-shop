@@ -1,6 +1,8 @@
 package com.pizzashop.pizza_shop.config;
 
+import com.pizzashop.pizza_shop.transactions.dirtyReadProblemScenario.demo1;
 import com.pizzashop.pizza_shop.transactions.propagations.*;
+import com.pizzashop.pizza_shop.transactions.supportsDemo.WithTransaction;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -108,15 +110,65 @@ public class DataLoader {
 //        };
 //    }
 
+//    @Bean
+//    CommandLineRunner testPropaqationRequiresNew(OrderService1 orderService1)
+//    {
+//        return args->{
+//          try{
+//              orderService1.createOrder();
+//          } catch (Exception e) {
+//              throw new RuntimeException(e);
+//          }
+//        };
+//    }
+
+//    @Bean
+//    CommandLineRunner testSupportsWithTransactional(WithTransaction withTransaction)
+//    {
+//        return args -> {
+//
+//            withTransaction.crateOrder();
+//        };
+//    }
+
     @Bean
-    CommandLineRunner testPropaqationRequiresNew(OrderService1 orderService1)
+    CommandLineRunner testDirtyReadProblem(demo1 demo1)
     {
-        return args->{
-          try{
-              orderService1.createOrder();
-          } catch (Exception e) {
-              throw new RuntimeException(e);
-          }
+        return args ->{
+
+            Thread thread1 = new Thread(
+                    ()->
+                    {
+                        try{
+                            demo1.transactionA();
+                        } catch (Exception e) {
+                            System.out.println(e.getMessage());
+                        }
+                    }
+            );
+
+
+            Thread thread2 = new Thread(
+                    ()-> {
+                        try
+                        {
+                            Thread.sleep(2000);
+                            demo1.transactionB();
+                        }
+                        catch (Exception e)
+                        {
+                            System.out.println(e.getMessage());
+                        }
+                    }
+            );
+
+
+
+            thread1.start();
+            thread2.start();
         };
+
+
     }
+
 }
