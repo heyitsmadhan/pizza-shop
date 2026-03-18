@@ -2,6 +2,7 @@ package com.pizzashop.pizza_shop.config;
 
 import com.pizzashop.pizza_shop.transactions.dirtyReadProblemScenario.demo1;
 import com.pizzashop.pizza_shop.transactions.nonRepeatbleReadService.NonRepeatbleDemo;
+import com.pizzashop.pizza_shop.transactions.nonRepeatbleReadService.NonRepeatbleDemoSol;
 import com.pizzashop.pizza_shop.transactions.propagations.*;
 import com.pizzashop.pizza_shop.transactions.supportsDemo.WithTransaction;
 import org.springframework.boot.CommandLineRunner;
@@ -171,15 +172,50 @@ public class DataLoader {
 //
 //    }
 
+//    @Bean
+//    CommandLineRunner testNonRepeatableDemo(NonRepeatbleDemo nonRepeatbleDemo)
+//    {
+//        return ags ->{
+//
+//            Thread t1 = new Thread(
+//                    ()->{
+//                        try{
+//                            nonRepeatbleDemo.transactionA();
+//                        } catch (Exception e) {
+//                            System.out.println(e.getMessage());
+//                        }
+//                    }
+//            );
+//
+//            Thread t2 = new Thread(
+//                    ()->{
+//                        try{
+//                            Thread.sleep(1000);
+//                            nonRepeatbleDemo.transactionB();
+//                        }
+//                        catch (Exception e)
+//                        {
+//                            System.out.println(e.getMessage());
+//                        }
+//                    }
+//            );
+//
+//            t1.start();
+//            t2.start();
+//        };
+//
+//    }
+
+
     @Bean
-    CommandLineRunner testNonRepeatableDemo(NonRepeatbleDemo nonRepeatbleDemo)
+    CommandLineRunner testNonRepeatableDemo(NonRepeatbleDemoSol nonRepeatbleDemoSol)
     {
         return ags ->{
 
             Thread t1 = new Thread(
                     ()->{
                         try{
-                            nonRepeatbleDemo.transactionA();
+                            nonRepeatbleDemoSol.transactionA();
                         } catch (Exception e) {
                             System.out.println(e.getMessage());
                         }
@@ -190,7 +226,7 @@ public class DataLoader {
                     ()->{
                         try{
                             Thread.sleep(1000);
-                            nonRepeatbleDemo.transactionB();
+                            nonRepeatbleDemoSol.transactionB();
                         }
                         catch (Exception e)
                         {
