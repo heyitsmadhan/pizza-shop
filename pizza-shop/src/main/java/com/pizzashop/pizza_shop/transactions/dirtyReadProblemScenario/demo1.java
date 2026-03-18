@@ -21,13 +21,13 @@ public class demo1 {
     @Transactional(isolation= Isolation.READ_UNCOMMITTED)
     public void transactionA() throws Exception {
         logger.info("transaction A reading the total pizzas available quantity: {} ", pizzaRepository.totalStock());
-        Pizza pizza = pizzaRepository.findById(1L).orElseThrow();
+        Pizza pizza = pizzaRepository.findById(3L).orElseThrow();
         logger.info("Pizza Name: {} and stock: {} ", pizza.getName(), pizza.getStock());
-        pizza.setStock(0);
+        pizza.setStock(28);
         pizzaRepository.save(pizza); //we are saving pizza table but commit is not going to happen here as
         // at the method end commit will get executed and if no exception is thrown
         logger.info("Pizza Name: {} and updated stock: {} ", pizza.getName(), pizza.getStock());
-        logger.info("Transaction A updated stock to 0 but NOT committed");
+        logger.info("Transaction A updated stock to {} but NOT committed",pizza.getStock());
         pizzaRepository.flush(); // force hibernate to push the changes immedialty to DB
 
 
@@ -35,11 +35,11 @@ public class demo1 {
         throw new RuntimeException("An exception occurred in transaction A roll back!");
     }
 
-    @Transactional(isolation = Isolation.READ_UNCOMMITTED)
+    @Transactional(isolation = Isolation.READ_COMMITTED)
     public void transactionB()
     {
         logger.info("transaction B reading the total pizzas available quantity: {} ", pizzaRepository.totalStock());
-        Pizza pizza = pizzaRepository.findById(1L).orElseThrow();
+        Pizza pizza = pizzaRepository.findById(3L).orElseThrow();
         logger.info("Transaction B: Pizza Name: {} and stock: {} ", pizza.getName(), pizza.getStock());
     }
 }

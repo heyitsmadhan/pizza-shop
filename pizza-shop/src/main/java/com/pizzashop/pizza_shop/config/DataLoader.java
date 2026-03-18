@@ -134,22 +134,23 @@ public class DataLoader {
     @Bean
     CommandLineRunner testDirtyReadProblem(demo1 demo1)
     {
-        return args ->{
+        return args -> {
 
-            Thread thread1 = new Thread(
-                    ()->
-                    {
-                        try{
-                            demo1.transactionA();
-                        } catch (Exception e) {
-                            System.out.println(e.getMessage());
-                        }
-                    }
+            Thread t1 = new Thread(()->{
+
+                try{
+                    demo1.transactionA();
+                }
+                catch (Exception e)
+                {
+                    System.out.println(e.getMessage());
+                }
+            }
             );
 
+            Thread t2 = new Thread(
+                    ()->{
 
-            Thread thread2 = new Thread(
-                    ()-> {
                         try
                         {
                             Thread.sleep(2000);
@@ -162,10 +163,8 @@ public class DataLoader {
                     }
             );
 
-
-
-            thread1.start();
-            thread2.start();
+            t1.start();
+            t2.start();
         };
 
 
